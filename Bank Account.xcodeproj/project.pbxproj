@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E53BB2AB1B9EDF2F0006F823 /* libjansson.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E53BB2AA1B9EDF2F0006F823 /* libjansson.dylib */; };
 		E53EE5541B9A27240034DB95 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = E53EE5531B9A27240034DB95 /* main.c */; };
 /* End PBXBuildFile section */
 
@@ -23,8 +24,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E53BB2A81B9EDE540006F823 /* libjansson.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libjansson.4.dylib; path = ../../../../usr/lib/libjansson.4.dylib; sourceTree = "<group>"; };
+		E53BB2AA1B9EDF2F0006F823 /* libjansson.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libjansson.dylib; path = ../../../../usr/local/Cellar/jansson/2.7/lib/libjansson.dylib; sourceTree = "<group>"; };
 		E53EE5501B9A27240034DB95 /* Bank Account */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Bank Account"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E53EE5531B9A27240034DB95 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		E5C8004E1B9EDA8100A66351 /* libjansson.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libjansson.dylib; path = "../../Downloads/jansson-2.7/src/libjansson.dylib"; sourceTree = "<group>"; };
+		E5C800501B9EDD9D00A66351 /* libjansson.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libjansson.dylib; path = ../../../../usr/lib/libjansson.dylib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E53BB2AB1B9EDF2F0006F823 /* libjansson.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -41,6 +47,10 @@
 		E53EE5471B9A27240034DB95 = {
 			isa = PBXGroup;
 			children = (
+				E53BB2AA1B9EDF2F0006F823 /* libjansson.dylib */,
+				E53BB2A81B9EDE540006F823 /* libjansson.4.dylib */,
+				E5C800501B9EDD9D00A66351 /* libjansson.dylib */,
+				E5C8004E1B9EDA8100A66351 /* libjansson.dylib */,
 				E53EE5521B9A27240034DB95 /* Bank Account */,
 				E53EE5511B9A27240034DB95 /* Products */,
 			);
@@ -205,6 +215,15 @@
 		E53EE5581B9A27240034DB95 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/Cellar/jansson/2.7/lib/,
+					/usr/local/Cellar/jansson/2.7/lib,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -212,6 +231,15 @@
 		E53EE5591B9A27240034DB95 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/Cellar/jansson/2.7/lib/,
+					/usr/local/Cellar/jansson/2.7/lib,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -235,6 +263,7 @@
 				E53EE5591B9A27240034DB95 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

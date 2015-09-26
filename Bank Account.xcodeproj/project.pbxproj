@@ -24,12 +24,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		E53BB2A81B9EDE540006F823 /* libjansson.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libjansson.4.dylib; path = ../../../../usr/lib/libjansson.4.dylib; sourceTree = "<group>"; };
 		E53BB2AA1B9EDF2F0006F823 /* libjansson.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libjansson.dylib; path = ../../../../usr/local/Cellar/jansson/2.7/lib/libjansson.dylib; sourceTree = "<group>"; };
 		E53EE5501B9A27240034DB95 /* Bank Account */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Bank Account"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E53EE5531B9A27240034DB95 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
-		E5C8004E1B9EDA8100A66351 /* libjansson.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libjansson.dylib; path = "../../Downloads/jansson-2.7/src/libjansson.dylib"; sourceTree = "<group>"; };
-		E5C800501B9EDD9D00A66351 /* libjansson.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libjansson.dylib; path = ../../../../usr/lib/libjansson.dylib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,9 +45,6 @@
 			isa = PBXGroup;
 			children = (
 				E53BB2AA1B9EDF2F0006F823 /* libjansson.dylib */,
-				E53BB2A81B9EDE540006F823 /* libjansson.4.dylib */,
-				E5C800501B9EDD9D00A66351 /* libjansson.dylib */,
-				E5C8004E1B9EDA8100A66351 /* libjansson.dylib */,
 				E53EE5521B9A27240034DB95 /* Bank Account */,
 				E53EE5511B9A27240034DB95 /* Products */,
 			);
@@ -98,7 +92,7 @@
 		E53EE5481B9A27240034DB95 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0640;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Fabio Piazza";
 				TargetAttributes = {
 					E53EE54F1B9A27240034DB95 = {
@@ -155,6 +149,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;

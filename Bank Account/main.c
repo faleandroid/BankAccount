@@ -10,10 +10,14 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <unistd.h>
+#include <dirent.h>
 #include <jansson.h>
 
-#define REVENUE "/Users/fabio/Desktop/Bank Account/Bank Account/revenue.json"
-#define LOST "/Users/fabio/Desktop/Bank Account/Bank Account/lost.json"
+#define REVENUE "/Users/fabio/Desktop/revenue.json"
+#define LOST "/Users/fabio/Desktop/lost.json"
+
+#define STRLEN 1024
 
 struct lost
 {
@@ -23,7 +27,6 @@ struct lost
     time_t date;
     
     struct lost * next;
-    
 };
 
 struct revenue
@@ -38,6 +41,25 @@ struct revenue
 
 struct revenue * firstRevenueMovement = NULL;
 struct lost * firstLostMovement = NULL;
+
+float total = 0;
+
+void getTotal(char * revenue)
+{
+    json_error_t * error;
+    
+    FILE * revenueFile = fopen(strcat(revenue, "/revenue.json"), "r");
+    
+    json_t * json_total = json_loadf(revenueFile, 0, error);
+    
+    json_total = json_object_get(json_total, "total");
+    
+    total = json_real_value(json_total);
+    
+    free(json_total);
+    
+    fclose(revenueFile);
+}
 
 int dateValidator(struct tm date)
 {
@@ -105,6 +127,62 @@ int dateValidator(struct tm date)
     }
     
     return valid;
+}
+
+time_t getDate()
+{
+    struct tm * date= (struct tm *) calloc(1, sizeof(struct tm));
+    
+    
+    do {
+        
+        printf("inserisci ora : minuti , giorno/mese/anno della transazione\n");
+        
+        printf("ore\n");
+        
+        scanf("%d", &date->tm_hour);
+        getchar();
+        
+        printf("minuti\n");
+        
+        scanf("%d", &date->tm_min);
+        getchar();
+        
+        printf("giorno\n");
+        
+        scanf("%d", &date->tm_mday);
+        getchar();
+        
+        printf("mese\n");
+        
+        scanf("%d", &date->tm_mon);
+        getchar();
+        
+        printf("anno\n");
+        
+        scanf("%d", &date->tm_year);
+        
+        date->tm_year -= 1900;
+        
+        getchar();
+        
+    } while (!dateValidator(*date));
+    
+    time_t compact_date = mktime(date);
+    
+    return compact_date;
+}
+
+char  * getString()
+{
+    char * string = calloc(1, STRLEN);
+    
+    fgets(string, STRLEN, stdin);
+    
+    if ((strlen(string) > 0) && string[strlen(string)-1] == '\n')
+        string[strlen(string)-1] = '\0';
+    
+    return string;
 }
 
 int createRevenueMovementList(FILE * revenue)
@@ -269,63 +347,22 @@ json_t * createLostArray(struct lost * lost)
 void addNewRevenueMovement()
 {
     float value;
-    char * title = calloc(1, 255), * description = calloc(1, 255);
-    struct tm * date= (struct tm *) calloc(1, sizeof(struct tm));
+    char * title = calloc(1, STRLEN), * description = calloc(1, STRLEN);
     
-    printf("inserisci un titolo per le entrate!\n");
+    printf("adding a new Revenue Movement\n");
     
-    fgets(title, 255, stdin);
-    
-    if ((strlen(title) > 0) && title[strlen(title)-1] == '\n')
-        title[strlen(title)-1] = '\0';
+    title = strdup(getString());
     
     printf("inserisci una descrizione\n");
     
-    fgets(description, 255, stdin);
-    
-    if ((strlen(description) > 0) && description[strlen(description)-1] == '\n')
-        description[strlen(description)-1] = '\0';
+    description = strdup(getString());
     
     printf("inserisci il valore della transazione\n");
     
     scanf("%f", &value);
     getchar();
     
-    do {
-    
-        printf("inserisci ora : minuti , giorno/mese/anno della transazione\n");
-    
-        printf("ore\n");
-    
-        scanf("%d", &date->tm_hour);
-        getchar();
-    
-        printf("minuti\n");
-    
-        scanf("%d", &date->tm_min);
-        getchar();
-    
-        printf("giorno\n");
-    
-        scanf("%d", &date->tm_mday);
-        getchar();
-    
-        printf("mese\n");
-    
-        scanf("%d", &date->tm_mon);
-        getchar();
-    
-        printf("anno\n");
-    
-        scanf("%d", &date->tm_year);
-        
-        date->tm_year -= 1900;
-        
-        getchar();
-        
-    } while (!dateValidator(*date));
-    
-    time_t compact_date = mktime(date);
+    time_t compact_date = getDate();
     
     struct revenue * newRvenue = malloc(sizeof(struct revenue));
     
@@ -347,62 +384,22 @@ void addNewLostMovement()
 {
     
     float value;
-    char * title = calloc(1, 255), * description = calloc(1, 255);
-    struct tm * date= (struct tm *) calloc(1, sizeof(struct tm));
+    char * title = calloc(1, STRLEN), * description = calloc(1, STRLEN);
     
-    printf("inserisci un titolo per le perdite!\n");
+    printf("adding a new Lost Movement:\n");
     
-    fgets(title, 255, stdin);
-    
-    if ((strlen(title) > 0) && title[strlen(title)-1] == '\n')
-        title[strlen(title)-1] = '\0';
+    title = strdup(getString());
     
     printf("inserisci una descrizione\n");
     
-    fgets(description, 255, stdin);
-    
-    if ((strlen(description) > 0) && description[strlen(description)-1] == '\n')
-        description[strlen(description)-1] = '\0';
+    description = strdup(getString());
     
     printf("inserisci il valore della transazione\n");
     
     scanf("%f", &value);
     getchar();
     
-    do {
-        printf("inserisci ora : minuti , giorno/mese/anno della transazione\n");
-        
-        printf("ore\n");
-        
-        scanf("%d", &date->tm_hour);
-        getchar();
-        
-        printf("minuti\n");
-        
-        scanf("%d", &date->tm_min);
-        getchar();
-        
-        printf("giorno\n");
-        
-        scanf("%d", &date->tm_mday);
-        getchar();
-        
-        printf("mese\n");
-        
-        scanf("%d", &date->tm_mon);
-        getchar();
-        
-        printf("anno\n");
-        
-        scanf("%d", &date->tm_year);
-        
-        date->tm_year -= 1900;
-        
-        getchar();
-        
-    } while (!dateValidator(*date));
-    
-    time_t compact_date = mktime(date);
+    time_t compact_date = getDate();
     
     struct lost * newLost = malloc(sizeof(struct lost));
     
@@ -420,29 +417,33 @@ void addNewLostMovement()
     
 }
 
-void saveRevenueMovements()
+void saveRevenueMovements(char * save_path)
 {
     json_t * json_revenue = json_object();
     
     json_t * array = json_array();
+
+    json_t * json_total = json_real(total);
     
     for (struct revenue * revenue = firstRevenueMovement; revenue!=0; revenue=revenue->next)
     {
         json_array_append(array, createRevenueArray(revenue));
     }
     
-    int i  = json_object_set(json_revenue, "revenue", array);
+    int i  = json_object_set(json_revenue, "total", json_total);
     
-    if (i == -1)
+    int j  = json_object_set(json_revenue, "revenue", array);
+    
+    if (i == -1 || j == -1)
     {
         printf("errore non è possibile scrivere il file");
     }
     
-    json_dump_file(json_revenue, REVENUE, JSON_INDENT(3));
+    json_dump_file(json_revenue, strcat(save_path, "/revenue.json"), JSON_INDENT(3));
     
 }
 
-void saveLostArray()
+void saveLostMovements(char * save_path)
 {
     json_t * json_lost = json_object();
     
@@ -460,7 +461,7 @@ void saveLostArray()
         printf("errore non è possibile scrivere il file");
     }
     
-    json_dump_file(json_lost, LOST, JSON_INDENT(3));
+    json_dump_file(json_lost, strcat(save_path, "/lost.json"), JSON_INDENT(3));
 }
 
 void listAllMovements()
@@ -494,7 +495,7 @@ void listAllMovements()
     
     if (firstLostMovement == NULL)
     {
-        printf("non ci sono entrate da visualizzare\n");
+        printf("non ci sono uscite da visualizzare\n");
         
     } else {
         
@@ -585,19 +586,16 @@ struct lost * findPrevLostMovement(char * string)
     return NULL;
 }
 
-char * getTitle()
+char * searchTitle()
 {
     
-    char * title = calloc(1, 255);
+    char * title = calloc(1, STRLEN);
     
     while (1)
     {
         printf("inserire il titolo della transazione che si vuole modificare o eliminare:\n");
         
-        fgets(title, 255, stdin);
-        
-        if ((strlen(title) > 0) && title[strlen(title)-1] == '\n')
-            title[strlen(title)-1] = '\0';
+        title = strdup(getString());
         
         if (*title == '\0')
         {
@@ -613,6 +611,7 @@ char * getTitle()
                 
                 return title;
             }
+            
         } else return title;
     }
     
@@ -622,8 +621,7 @@ void changeRevenueField(struct revenue * revenue)
 {
     
     float value;
-    char * title = malloc(255), * description = malloc(255);
-    struct tm * date= (struct tm *) calloc(1, sizeof(struct tm));
+    char * title = malloc(STRLEN), * description = malloc(STRLEN);
     
     char ch;
     
@@ -634,12 +632,9 @@ void changeRevenueField(struct revenue * revenue)
     
     if (ch == 'y' || ch == 'Y')
     {
-        printf("inserisci un titolo per le entrate!\n");
+        printf("inserisci un titolo per la transazione!\n");
         
-        fgets(title, 255, stdin);
-        
-        if ((strlen(title) > 0) && title[strlen(title)-1] == '\n')
-            title[strlen(title)-1] = '\0';
+        title = getString();
         
         revenue->title = strdup(title);
     }
@@ -653,10 +648,7 @@ void changeRevenueField(struct revenue * revenue)
     {
         printf("inserisci una descrizione\n");
         
-        fgets(description, 255, stdin);
-        
-        if ((strlen(description) > 0) && description[strlen(description)-1] == '\n')
-            description[strlen(description)-1] = '\0';
+        description = strdup(getString());
         
         revenue->description = strdup(description);
     }
@@ -682,33 +674,7 @@ void changeRevenueField(struct revenue * revenue)
     
     if (ch == 'y' || ch == 'Y')
     {
-        do {
-            
-            printf("inserisci ora : minuti , giorno/mese/anno della transazione\n");
-            
-            printf("ore\n");
-            
-            scanf("%d", &date->tm_hour);
-            
-            printf("minuti\n");
-            
-            scanf("%d", &date->tm_min);
-            
-            printf("giorno\n");
-            
-            scanf("%d", &date->tm_mday);
-            
-            printf("mese\n");
-            
-            scanf("%d", &date->tm_mon);
-            
-            printf("anno\n");
-            
-            scanf("%d", &date->tm_year);
-            
-        } while (!dateValidator(*date));
-        
-        time_t compact_date = mktime(date);
+        time_t compact_date = getDate();
         
         revenue->date = compact_date;
     }
@@ -717,8 +683,7 @@ void changeRevenueField(struct revenue * revenue)
 void changeLostField(struct lost * lost)
 {
     float value;
-    char * title = malloc(255), * description = malloc(255);
-    struct tm * date= (struct tm *) calloc(1, sizeof(struct tm));
+    char * title = malloc(STRLEN), * description = malloc(STRLEN);
     
     char ch;
     
@@ -731,10 +696,7 @@ void changeLostField(struct lost * lost)
     {
         printf("inserisci un titolo per le entrate!\n");
         
-        fgets(title, 255, stdin);
-        
-        if ((strlen(title) > 0) && title[strlen(title)-1] == '\n')
-            title[strlen(title)-1] = '\0';
+        title = getString();
         
         lost->title = strdup(title);
     }
@@ -748,10 +710,7 @@ void changeLostField(struct lost * lost)
     {
         printf("inserisci una descrizione\n");
         
-        fgets(description, 255, stdin);
-        
-        if ((strlen(description) > 0) && description[strlen(description)-1] == '\n')
-            description[strlen(description)-1] = '\0';
+        description = strdup(getString());
         
         lost->description = strdup(description);
     }
@@ -777,33 +736,7 @@ void changeLostField(struct lost * lost)
     
     if (ch == 'y' || ch == 'Y')
     {
-        do {
-            
-            printf("inserisci ora : minuti , giorno/mese/anno della transazione\n");
-            
-            printf("ore\n");
-            
-            scanf("%d", &date->tm_hour);
-            
-            printf("minuti\n");
-            
-            scanf("%d", &date->tm_min);
-            
-            printf("giorno\n");
-            
-            scanf("%d", &date->tm_mday);
-            
-            printf("mese\n");
-            
-            scanf("%d", &date->tm_mon);
-            
-            printf("anno\n");
-            
-            scanf("%d", &date->tm_year);
-            
-        } while (!dateValidator(*date));
-        
-        time_t compact_date = mktime(date);
+        time_t compact_date = getDate();
         
         lost->date = compact_date;
     }
@@ -815,11 +748,11 @@ int updateRevenue()
     
     struct revenue * revenue;
     
-    char * title = calloc(1, 255);
+    char * title = calloc(1, STRLEN);
     
     do
     {
-        title = strdup(getTitle());
+        title = strdup(searchTitle());
         
         if (title == '\0') return stop = 0;
         
@@ -856,15 +789,15 @@ int updateRevenue()
 
 int updateLost()
 {
-    int stop;
+    int stop = 1;
     
     struct lost * lost;
     
-    char * title = calloc(1, 255);
+    char * title = calloc(1, STRLEN);
     
     do
     {
-        title = strdup(getTitle());
+        title = strdup(searchTitle());
         
         if (title == '\0') return stop = 0;
         
@@ -894,10 +827,25 @@ int updateLost()
     
     changeLostField(lost);
     
-    stop = 1;
-    
     return stop;
     
+}
+
+void updateTotal()
+{
+    struct revenue * revenue;
+    
+    struct lost * lost;
+    
+    for (revenue = firstRevenueMovement; revenue != NULL; revenue = revenue->next)
+    {
+        total += revenue->value;
+    }
+    
+    for (lost = firstLostMovement; lost != NULL; lost = lost->next)
+    {
+        total += lost->value;
+    }
 }
 
 int deleteRevenue()
@@ -906,11 +854,11 @@ int deleteRevenue()
     
     struct revenue * revenue;
     
-    char * title = calloc(1, 255);
+    char * title = calloc(1, STRLEN);
     
     do
     {
-        title = strdup(getTitle());
+        title = strdup(searchTitle());
         
         if (title == '\0') return stop = 0;
         
@@ -965,11 +913,11 @@ int deleteLost()
     
     struct lost * lost;
     
-    char * title = calloc(1, 255);
+    char * title = calloc(1, STRLEN);
     
     do
     {
-        title = strdup(getTitle());
+        title = strdup(searchTitle());
         
         if (title == '\0') return stop = 0;
         
@@ -1018,103 +966,231 @@ int deleteLost()
     return stop;
 }
 
-int main(int argc, const char * argv[])
+void freeRevenue()
 {
-    FILE * revenue, * lost;
+    struct revenue * revenue;
     
-    revenue = fopen(REVENUE, "r");
-    
-    lost = fopen(LOST, "r");
-    
-    createRevenueMovementList(revenue);
-    createLostMovementList(lost);
+    for (revenue = firstRevenueMovement; revenue!=NULL; )
+    {
+        struct revenue * bk = revenue->next;
+        
+        free(revenue);
+        
+        revenue = bk;
+    }
+}
 
+void freeLost()
+{
+    struct lost * lost;
+    
+    for (lost = firstLostMovement; lost!=NULL; lost = lost->next)
+    {
+        struct lost * bk = lost->next;
+        
+        free(lost);
+        
+        lost = bk;
+    }
+}
+
+void updateSavePath()
+{
+    FILE *save;
+    
+    char path[STRLEN];
+    
+    DIR * revenue = NULL;
+    
+    do
+    {
+        printf("Where should i save your docs?\n");
+        
+        fgets(path, STRLEN, stdin);
+        
+        if ((strlen(path) > 0) && path[strlen(path)-1] == '\n')
+            path[strlen(path)-1] = '\0';
+        
+        if (*path != '\0')
+        {
+            revenue = opendir(path);
+        }
+        
+        if (revenue == NULL) printf("riprova path non valido\n");
+        
+    } while (revenue == NULL);
+    
+    save = fopen(".save.txt", "w");
+    
+    fwrite(path, 1, strlen(path), save);
+    
+    fclose(save);
+}
+
+char * firstOpen_update(FILE * save)
+{
+    char * path = calloc(1, STRLEN);
+    
+    save = fopen(".save.txt", "r");
+    
+    if (save != NULL)
+    {
+        fgets(path, STRLEN, save);
+        
+        if (*path != '\0') return path;
+    }
+    
+    fclose(save);
+    
+    return '\0';
+}
+
+int selection(char * save_path)
+{
+    
     char c;
+    
+    char * bk = calloc(1, STRLEN);
     
     while (1)
     {
-        printf("dimmi cosa vuoi fare: a per aggiungere, u per aggiornare, d per eliminare, l per visualizzare i movimenti  e e per uscire\n");
-        
-        scanf("%c", &c);
-        getchar();
-        
-        switch (c) {
-            case 'a':
-                
-                printf("vuoi aggiungere un positivo (p) o un negativo (n)? \n");
-                
-                scanf("%c", &c);
-                getchar();
-                
-                if (c == 'P' || c == 'p')
-                {
-                    addNewRevenueMovement();
-                }
-                
-                if (c == 'n' || c == 'N')
-                {
-                    addNewLostMovement();
-                }
-                
-                break;
-            case 'u':
-                
-                printf("vuoi aggiornare un positivo (p) o un negativo (n)? \n");
-                
-                scanf("%c", &c);
-                getchar();
-                
-                if (c == 'P' || c == 'p')
-                {
-                    updateRevenue();
-                }
-                
-                if (c == 'n' || c == 'N')
-                {
-                    updateLost();
-                }
-                
-                break;
-            case 'd':
-                
-                printf("vuoi cancellare un positivo (p) o un negativo (n)? \n");
-                
-                scanf("%c", &c);
-                getchar();
-                
-                if (c == 'P' || c == 'p')
-                {
-                    deleteRevenue();
-                }
-                
-                if (c == 'n' || c == 'N')
-                {
-                    deleteLost();
-                }
-                
-                break;
-            case 'l':
-                
-                listAllMovements();
-                
-                break;
-            case 'e':
-                
-                printf("goodBye\n");
-                
-                return 0;
-                
-                break;
-                
-            default:
-                
-                printf("comando non riconosciuto riprovare!!\n");
-                
-                break;
-        }
-        
-        
-    }
+     printf("dimmi cosa vuoi fare: 'a' per aggiungere, 'u' per aggiornare,"
+            " 'd' per eliminare, 'l' per visualizzare i movimenti,"
+            " 's' per modficare la cartella di salvataggio e 'e' per uscire\n");
      
+     scanf("%c", &c);
+     getchar();
+     
+     switch (c) {
+         case 's' :
+             
+             updateSavePath();
+             
+             break;
+             
+         case 'a':
+     
+             printf("vuoi aggiungere un positivo (p) o un negativo (n)? \n");
+     
+             scanf("%c", &c);
+             getchar();
+     
+             if (c == 'P' || c == 'p')
+             {
+                 addNewRevenueMovement();
+             }
+     
+             if (c == 'n' || c == 'N')
+             {
+                 addNewLostMovement();
+             }
+     
+             break;
+         case 'u':
+     
+             printf("vuoi aggiornare un positivo (p) o un negativo (n)? \n");
+     
+             scanf("%c", &c);
+             getchar();
+     
+             if (c == 'P' || c == 'p')
+             {
+                 updateRevenue();
+             }
+     
+             if (c == 'n' || c == 'N')
+             {
+                 updateLost();
+             }
+     
+             break;
+         case 'd':
+     
+             printf("vuoi cancellare un positivo (p) o un negativo (n)? \n");
+     
+             scanf("%c", &c);
+             getchar();
+     
+             if (c == 'P' || c == 'p')
+             {
+                 deleteRevenue();
+             }
+     
+             if (c == 'n' || c == 'N')
+             {
+                 deleteLost();
+             }
+     
+             break;
+         case 'l':
+     
+             listAllMovements();
+     
+             break;
+         case 'e':
+     
+             updateTotal();
+             
+             bk = strdup(save_path);
+             
+             saveLostMovements(save_path);
+             
+             saveRevenueMovements(bk);
+             
+             //freeRevenue();
+             //freeLost();
+             
+             printf("goodBye\n");
+             
+             return 0;
+             
+             break;
+     
+         default:
+     
+             printf("comando non riconosciuto riprovare!!\n");
+     
+             break;
+     }
+     
+     
+     }
+}
+
+
+
+int main(int argc, const char * argv[])
+{
+    FILE * revenue = NULL, * lost = NULL, * save = NULL;
+    
+    char * save_path  = calloc(1, STRLEN), * bk = calloc(1, STRLEN);
+    
+    save_path = firstOpen_update(save);
+    
+    bk = strdup(save_path);
+
+    if (save_path == '\0') updateSavePath();
+    
+    else
+    {
+        revenue = fopen(strcat(save_path, "/revenue.json"), "r");
+        
+        strcpy(save_path, bk);
+        
+        lost = fopen(strcat(bk, "/lost.json"), "r");
+    }
+    
+    createRevenueMovementList(revenue);
+    createLostMovementList(lost);
+    
+    fclose(revenue);
+    fclose(lost);
+    
+    strcpy(bk, save_path);
+    
+    getTotal(bk);
+    
+    selection(save_path);
+
     return 0;
 }

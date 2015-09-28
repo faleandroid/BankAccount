@@ -744,7 +744,7 @@ void changeLostField(struct lost * lost)
 
 int updateRevenue()
 {
-    int stop;
+    int stop = 1;
     
     struct revenue * revenue;
     
@@ -776,12 +776,9 @@ int updateRevenue()
         
     } while (revenue == NULL);
     
-    
     if (stop == 0) return stop;
     
     changeRevenueField(revenue);
-    
-    stop = 1;
     
     return stop;
     
@@ -821,7 +818,6 @@ int updateLost()
         }
         
     } while (lost == NULL);
-    
     
     if (stop == 0) return stop;
     
@@ -984,7 +980,7 @@ void freeLost()
 {
     struct lost * lost;
     
-    for (lost = firstLostMovement; lost!=NULL; lost = lost->next)
+    for (lost = firstLostMovement; lost!=NULL; )
     {
         struct lost * bk = lost->next;
         
@@ -1055,14 +1051,14 @@ int selection(char * save_path)
     while (1)
     {
      printf("dimmi cosa vuoi fare: 'a' per aggiungere, 'u' per aggiornare,"
-            " 'd' per eliminare, 'l' per visualizzare i movimenti,"
-            " 's' per modficare la cartella di salvataggio e 'e' per uscire\n");
+            " 'd' per eliminare, 'l' per visualizzare i movimenti, 's' per salvare i movimenti"
+            " 'f' per modficare la cartella di salvataggio e 'e' per uscire\n");
      
      scanf("%c", &c);
      getchar();
      
      switch (c) {
-         case 's' :
+         case 'f' :
              
              updateSavePath();
              
@@ -1104,6 +1100,7 @@ int selection(char * save_path)
              }
      
              break;
+             
          case 'd':
      
              printf("vuoi cancellare un positivo (p) o un negativo (n)? \n");
@@ -1122,11 +1119,21 @@ int selection(char * save_path)
              }
      
              break;
+             
          case 'l':
      
              listAllMovements();
      
              break;
+             
+         case 's':
+             
+             saveLostMovements(save_path);
+             
+             saveRevenueMovements(bk);
+             
+             break;
+             
          case 'e':
      
              updateTotal();
@@ -1137,8 +1144,8 @@ int selection(char * save_path)
              
              saveRevenueMovements(bk);
              
-             //freeRevenue();
-             //freeLost();
+             freeRevenue();
+             freeLost();
              
              printf("goodBye\n");
              

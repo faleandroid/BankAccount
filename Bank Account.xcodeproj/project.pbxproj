@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		E53BB2AB1B9EDF2F0006F823 /* libjansson.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E53BB2AA1B9EDF2F0006F823 /* libjansson.dylib */; };
 		E53EE5541B9A27240034DB95 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = E53EE5531B9A27240034DB95 /* main.c */; };
+		E5517AFD1BBA7D5A00D65921 /* getter.c in Sources */ = {isa = PBXBuildFile; fileRef = E5517AFB1BBA7D5A00D65921 /* getter.c */; settings = {ASSET_TAGS = (); }; };
+		E5517B001BBA7E0500D65921 /* validator.c in Sources */ = {isa = PBXBuildFile; fileRef = E5517AFE1BBA7E0500D65921 /* validator.c */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,6 +29,10 @@
 		E53BB2AA1B9EDF2F0006F823 /* libjansson.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libjansson.dylib; path = ../../../../usr/local/Cellar/jansson/2.7/lib/libjansson.dylib; sourceTree = "<group>"; };
 		E53EE5501B9A27240034DB95 /* Bank Account */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Bank Account"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E53EE5531B9A27240034DB95 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		E5517AFB1BBA7D5A00D65921 /* getter.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = getter.c; sourceTree = "<group>"; };
+		E5517AFC1BBA7D5A00D65921 /* getter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = getter.h; sourceTree = "<group>"; };
+		E5517AFE1BBA7E0500D65921 /* validator.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = validator.c; sourceTree = "<group>"; };
+		E5517AFF1BBA7E0500D65921 /* validator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = validator.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +68,10 @@
 			isa = PBXGroup;
 			children = (
 				E53EE5531B9A27240034DB95 /* main.c */,
+				E5517AFB1BBA7D5A00D65921 /* getter.c */,
+				E5517AFC1BBA7D5A00D65921 /* getter.h */,
+				E5517AFE1BBA7E0500D65921 /* validator.c */,
+				E5517AFF1BBA7E0500D65921 /* validator.h */,
 			);
 			path = "Bank Account";
 			sourceTree = "<group>";
@@ -122,6 +132,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E5517AFD1BBA7D5A00D65921 /* getter.c in Sources */,
+				E5517B001BBA7E0500D65921 /* validator.c in Sources */,
 				E53EE5541B9A27240034DB95 /* main.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

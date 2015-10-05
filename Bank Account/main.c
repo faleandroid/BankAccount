@@ -14,6 +14,9 @@
 #include <dirent.h>
 #include <jansson.h>
 
+#include "getter.h"
+#include "validator.h"
+
 #define REVENUE "/Users/fabio/Desktop/revenue.json"
 #define LOST "/Users/fabio/Desktop/lost.json"
 
@@ -61,129 +64,7 @@ void getTotal(char * revenue)
     fclose(revenueFile);
 }
 
-int dateValidator(struct tm date)
-{
-    int valid = 1;
-    
-    if (date.tm_year < 0)
-    {
-        valid = 0;
-        
-        return valid;
-    }
-    
-    if (date.tm_mon < 0 || date.tm_mon > 11)
-    {
-        valid = 0;
-        
-        return valid;
-    }
-    
-    switch (date.tm_mon) {
-        case 9:
-        case 3:
-        case 5:
-        case 8:
-            
-            if (date.tm_mday < 0 || date.tm_mday > 30)
-            {
-                valid = 0;
-                return valid;
-            }
-            break;
-            
-        case 1:
-            
-            if (date.tm_mday < 0 || date.tm_mday > 28)
-            {
-                valid = 0;
-                return valid;
-            }
-            break;
-            
-        default:
-            
-            if (date.tm_mday < 0 || date.tm_mday > 31)
-            {
-                valid = 0;
-                return valid;
-            }
-            
-            break;
-    }
-    
-    if (date.tm_hour < 0 || date.tm_hour > 23)
-    {
-        valid = 0;
-        
-        return valid;
-    }
-    
-    if (date.tm_min < 0 || date.tm_min > 59)
-    {
-        valid = 0;
-        
-        return valid;
-    }
-    
-    return valid;
-}
 
-time_t getDate()
-{
-    struct tm * date= (struct tm *) calloc(1, sizeof(struct tm));
-    
-    
-    do {
-        
-        printf("inserisci ora : minuti , giorno/mese/anno della transazione\n");
-        
-        printf("ore\n");
-        
-        scanf("%d", &date->tm_hour);
-        getchar();
-        
-        printf("minuti\n");
-        
-        scanf("%d", &date->tm_min);
-        getchar();
-        
-        printf("giorno\n");
-        
-        scanf("%d", &date->tm_mday);
-        getchar();
-        
-        printf("mese\n");
-        
-        scanf("%d", &date->tm_mon);
-        getchar();
-        
-        printf("anno\n");
-        
-        scanf("%d", &date->tm_year);
-        
-        date->tm_year -= 1900;
-        
-        getchar();
-        
-    } while (!dateValidator(*date));
-    
-    time_t compact_date = mktime(date);
-    
-    return compact_date;
-}
-
-char  * getString()
-{
-    char * string = calloc(1, STRLEN);
-    
-    fgets(string, STRLEN, stdin);
-    
-    if ((strlen(string) > 0) && string[strlen(string)-1] == '\n')
-        string[strlen(string)-1] = '\0';
-    
-    return string;
-}
 
 int createRevenueMovementList(FILE * revenue)
 {
@@ -1163,8 +1044,6 @@ int selection(char * save_path)
      
      }
 }
-
-
 
 int main(int argc, const char * argv[])
 {
